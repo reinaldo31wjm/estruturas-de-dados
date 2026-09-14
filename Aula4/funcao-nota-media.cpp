@@ -1,41 +1,45 @@
 #include <stdio.h>
 #include <locale.h>
 
-float calcular_media(float p1, float p2, float at) {
-    return (p1 + p2) * 0.35f + at;
+double calc_media(double p1, double p2, double at) {
+    return (p1 + p2) * 0.35 + at;
+}
+
+void exibir(double m) {
+    printf("\n=== RESULTADO FINAL ===\n");
+    printf("MÃ©dia: %.2f\n", m);
+    printf("Status: %s\n", (m >= 6.0) ? "Aprovado" : "Reprovado");
+}
+
+void substitutiva(double *p1, double *p2, double at) {
+    double *menor = (*p1 < *p2) ? p1 : p2;
+
+    printf("A substitutiva substituirÃ¡ a %s.\n", (*p1 < *p2) ? "P1" : "P2");
+    printf("Digite a nota da substitutiva: ");
+    scanf("%lf", menor);
+
+    exibir(calc_media(*p1, *p2, at));
 }
 
 int main() {
-	setlocale(LC_ALL, "Portuguese");
-    float p1, p2, at, nota_sub;
+    setlocale(LC_ALL, "Portuguese");
+    double p1, p2, at;
 
-    printf("Informe a nota da P1: ");
-    scanf("%f", &p1);
-    printf("Informe a nota da P2: ");
-    scanf("%f", &p2);
-    printf("Informe a pontuação das atividades: ");
-    scanf("%f", &at);
+    printf("Digite a nota da P1: ");
+    scanf("%lf", &p1);
+    printf("Digite a nota da P2: ");
+    scanf("%lf", &p2);
+    printf("Digite a nota das atividades: ");
+    scanf("%lf", &at);
 
-    float media = calcular_media(p1, p2, at);
+    double m = calc_media(p1, p2, at);
 
-    if (media < 6.0f) {
-        printf("\nMédia atual: %.2f (Abaixo da média mínima)\n", media);
-        
-        if (p1 < p2) {
-            printf("A prova substitutiva substituirá a P1.\n");
-            printf("Informe a nota da substitutiva: ");
-            scanf("%f", &nota_sub);
-            p1 = nota_sub;
-        } else {
-            printf("A prova substitutiva substituirá a P2.\n");
-            printf("Informe a nota da substitutiva: ");
-            scanf("%f", &nota_sub);
-            p2 = nota_sub;
-        }
-        media = calcular_media(p1, p2, at);
+    if (m < 6.0) {
+        printf("\nMÃ©dia atual: %.2f (Abaixo do mÃ­nimo 6.0)\n", m);
+        substitutiva(&p1, &p2, at);
+    } else {
+        exibir(m);
     }
-    printf("\nRESULTADO FINAL\n");
-    printf("Média: %.2f\n", media);
-    printf("Status: %s\n", (media >= 6.0f) ? "Aprovado!" : "Reprovado!");
+
     return 0;
 }
